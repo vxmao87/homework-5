@@ -36,13 +36,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script type = "text/javascript">
       $(document).ready(function() {
+
         $("#currentDay").text(moment().format('dddd, MMMM Do'));
         for(var hourNum = 0; hourNum < 9; hourNum++) {
           var timeBlock = $("<div>").addClass("row time-block");
           var hourBlock = $("<div>").addClass("hour col-md-1");
           hourBlock.text(moment((9 + hourNum) + ":00", 'H').format('hA'));
           var textBox = $("<textarea>").addClass("description col-md-10").attr("id", "inputBox");
-
+          var input = localStorage.getItem("inputValue" + hourNum);
+          $("#inputBox").text(input);
           var pastTime = moment(9 + hourNum, 'H').format('H');
           var presentTime = moment().format('H');
           var futureTime = moment(10 + hourNum, 'H').format('H');
@@ -54,19 +56,17 @@
             textBox.addClass("past");
           }
           console.log(pastTime + " " + presentTime + " " + futureTime);
-          var saveBtnBlock = $("<button>").addClass("saveBtn saveBtn i:hover col-md-1");
-          var saveBtnImage = $("<i>").addClass("far fa-save");
+          var saveBtnBlock = $("<button>").addClass("saveBtn col-md-1");
+          var saveBtnImage = $("<i>").addClass("far fa-save saveBtn i:hover");
+
           saveBtnBlock.append(saveBtnImage);
           timeBlock.append(hourBlock, textBox, saveBtnBlock);
           $(".container").append(timeBlock);
+
         }
 
-        var input = localStorage.getItem("inputValue");
-        $("#inputBox").text(textBox.val());
-        
         $(".saveBtn").on("click", function() {
-          alert($("#inputBox").val());
-          localStorage.setItem("inputValue", input);
+          localStorage.setItem("object", $("#inputBox").val());
         });
 
       });
