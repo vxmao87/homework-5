@@ -37,14 +37,26 @@
     <script type = "text/javascript">
       $(document).ready(function() {
         $("#currentDay").text(moment().format('dddd, MMMM Do'));
-
-        var timeBlock = $("<div>").addClass("row time-block");
-        var hourBlock = $("<div>").addClass("hour col-md-1");
-        hourBlock.text("9AM"); //moment().format();
-        var textBox = $("<textarea>").addClass("present description col-md 8");
-        var saveBtnBlock = $("<button>").addClass("saveBtn saveBtn i:hover col-md-1");
-        timeBlock.append(hourBlock, textBox, saveBtnBlock);
-        $(".container").append(timeBlock);
+        for(var hourNum = 0; hourNum < 9; hourNum++) {
+          var timeBlock = $("<div>").addClass("row time-block");
+          var hourBlock = $("<div>").addClass("hour col-md-1");
+          hourBlock.text(moment((9 + hourNum) + ":00", 'H').format('hA'));
+          var textBox = $("<textarea>").addClass("description col-md-10");
+          var pastTime = moment(8 + hourNum, 'H').format('H');
+          var presentTime = moment().format('H');
+          var futureTime = moment(9 + hourNum, 'H').format('H');
+          if(presentTime === pastTime && presentTime < futureTime) {
+            textBox.addClass("present");
+          } else if(presentTime < futureTime) {
+            textBox.addClass("future");
+          } else {
+            textBox.addClass("past");
+          }
+          console.log(pastTime + " " + presentTime + " " + futureTime);
+          var saveBtnBlock = $("<button>").addClass("saveBtn saveBtn i:hover col-md-1");
+          timeBlock.append(hourBlock, textBox, saveBtnBlock);
+          $(".container").append(timeBlock);
+        }
       });
     </script>
   </body>
