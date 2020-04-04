@@ -37,14 +37,24 @@
     <script type = "text/javascript">
       $(document).ready(function() {
 
+        // Displays the current date on top of the page
         $("#currentDay").text(moment().format('dddd, MMMM Do'));
+
         for(var hourNum = 0; hourNum < 9; hourNum++) {
+          // Creates a row that will display the time, text box and the save button
           var timeBlock = $("<div>").addClass("row time-block");
+
+          // Creates a block that displays the hour (9AM, 10AM, etc.)
           var hourBlock = $("<div>").addClass("hour col-md-1");
           hourBlock.text(moment((9 + hourNum) + ":00", 'H').format('hA'));
+
+          // Creates a block where the text is stored while grabbing the previous
+          // tasks from localStorage if inputted inside the text boxes
           var textBox = $("<textarea>").addClass("description col-md-10").attr("id", "hour" + hourNum);
           textBox.text(localStorage.getItem("hour" + hourNum));
-          console.log(localStorage.getItem("hour" + hourNum));
+
+          // Tests to see what the text box will be colored depending on whether the
+          // time is in the past, present, or future
           var pastTime = parseInt(moment(9 + hourNum, 'H').format('H'));
           var presentTime = parseInt(moment().format('H'));
           var futureTime = parseInt(moment(10 + hourNum, 'H').format('H'));
@@ -55,16 +65,22 @@
           } else {
             textBox.addClass("past");
           }
-          console.log(pastTime + " " + presentTime + " " + futureTime);
+
+          // Creates the save button and implements a 'save' image, and then appends 
+          // the picture onto the save button element
           var saveBtnBlock = $("<button>").addClass("saveBtn col-md-1").attr("data-hour", hourNum);
           var saveBtnImage = $("<i>").addClass("far fa-save");
-
           saveBtnBlock.append(saveBtnImage);
+
+          // Appends the hour block, text block and save-button block onto the row
+          // block previously created, and then appends the resulting block onto
+          // the body of the code were the time block goes
           timeBlock.append(hourBlock, textBox, saveBtnBlock);
           $(".container").append(timeBlock);
-
         }
 
+        // When a button is clicked on (if an object with the "saveBtn" class is clicked on),
+        // the text typed into the text box is stored inside localStorage
         $(".saveBtn").on("click", function() {
           var hour = $(this).attr("data-hour");
           localStorage.setItem("hour" + hour, $("#hour" + hour).val());
