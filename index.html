@@ -42,22 +42,22 @@
           var timeBlock = $("<div>").addClass("row time-block");
           var hourBlock = $("<div>").addClass("hour col-md-1");
           hourBlock.text(moment((9 + hourNum) + ":00", 'H').format('hA'));
-          var textBox = $("<textarea>").addClass("description col-md-10").attr("id", "inputBox");
-          var input = localStorage.getItem("inputValue" + hourNum);
-          $("#inputBox").text(input);
-          var pastTime = moment(9 + hourNum, 'H').format('H');
-          var presentTime = moment().format('H');
-          var futureTime = moment(10 + hourNum, 'H').format('H');
-          if(presentTime === pastTime && presentTime < futureTime) {
+          var textBox = $("<textarea>").addClass("description col-md-10").attr("id", "hour" + hourNum);
+          textBox.text(localStorage.getItem("hour" + hourNum));
+          console.log(localStorage.getItem("hour" + hourNum));
+          var pastTime = parseInt(moment(9 + hourNum, 'H').format('H'));
+          var presentTime = parseInt(moment().format('H'));
+          var futureTime = parseInt(moment(10 + hourNum, 'H').format('H'));
+          if(presentTime === pastTime) {
             textBox.addClass("present");
-          } else if(presentTime < futureTime) {
+          } else if(futureTime > presentTime) {
             textBox.addClass("future");
           } else {
             textBox.addClass("past");
           }
           console.log(pastTime + " " + presentTime + " " + futureTime);
-          var saveBtnBlock = $("<button>").addClass("saveBtn col-md-1");
-          var saveBtnImage = $("<i>").addClass("far fa-save saveBtn i:hover");
+          var saveBtnBlock = $("<button>").addClass("saveBtn col-md-1").attr("data-hour", hourNum);
+          var saveBtnImage = $("<i>").addClass("far fa-save");
 
           saveBtnBlock.append(saveBtnImage);
           timeBlock.append(hourBlock, textBox, saveBtnBlock);
@@ -66,7 +66,8 @@
         }
 
         $(".saveBtn").on("click", function() {
-          localStorage.setItem("object", $("#inputBox").val());
+          var hour = $(this).attr("data-hour");
+          localStorage.setItem("hour" + hour, $("#hour" + hour).val());
         });
 
       });
